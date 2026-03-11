@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Wallet, User, Mail, Lock, UserPlus } from 'lucide-react';
 import Alert from '../components/Alert';
 
 const Register = () => {

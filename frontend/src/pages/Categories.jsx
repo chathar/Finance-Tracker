@@ -80,15 +80,15 @@ const Categories = () => {
                             <div className="flex gap-4 p-1 bg-white/5 rounded-2xl">
                                 <button
                                     type="button"
-                                    className={`flex-1 py-3 px-4 rounded-xl font-bold transition-all ${type === 'expense' ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30' : 'text-slate-400 hover:text-white'}`}
-                                    onClick={() => setType('expense')}
+                                    className={`flex-1 py-3 px-4 rounded-xl font-bold transition-all ${formData.type === 'expense' ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30' : 'text-slate-400 hover:text-white'}`}
+                                    onClick={() => setFormData({ ...formData, type: 'expense' })}
                                 >
                                     Expense
                                 </button>
                                 <button
                                     type="button"
-                                    className={`flex-1 py-3 px-4 rounded-xl font-bold transition-all ${type === 'income' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' : 'text-slate-400 hover:text-white'}`}
-                                    onClick={() => setType('income')}
+                                    className={`flex-1 py-3 px-4 rounded-xl font-bold transition-all ${formData.type === 'income' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' : 'text-slate-400 hover:text-white'}`}
+                                    onClick={() => setFormData({ ...formData, type: 'income' })}
                                 >
                                     Income
                                 </button>
@@ -102,8 +102,8 @@ const Categories = () => {
                                 required
                                 className="w-full input-field"
                                 placeholder="e.g. Subsistence"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                value={formData.name}
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                             />
                         </div>
 
