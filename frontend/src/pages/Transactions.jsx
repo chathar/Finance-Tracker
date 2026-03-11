@@ -9,6 +9,8 @@ const Transactions = () => {
     const [formData, setFormData] = useState({ type: 'expense', amount: '', category: 'Food', description: '', date: new Date().toISOString().split('T')[0] });
     const [categories, setCategories] = useState([]);
     const [alertData, setAlertData] = useState({ type: '', text: '' });
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingId, setEditingId] = useState(null);
 
     useEffect(() => {
         fetchTransactions();
@@ -40,16 +42,43 @@ const Transactions = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/v1/transactions', formData, {
+            const config = {
                 headers: { 'x-auth-token': localStorage.getItem('token') }
-            });
-            setIsModalOpen(false);
+            };
+
+            if (isEditing) {
+                await axios.put(`http://localhost:5000/api/v1/transactions/${editingId}`, formData, config);
+                setAlertData({ type: 'success', text: 'Transaction updated successfully!' });
+            } else {
+                await axios.post('http://localhost:5000/api/v1/transactions', formData, config);
+                setAlertData({ type: 'success', text: 'Transaction added successfully!' });
+            }
+
+            closeModal();
             fetchTransactions();
-            setFormData({ type: 'expense', amount: '', category: 'Food', description: '', date: new Date().toISOString().split('T')[0] });
-            setAlertData({ type: 'success', text: 'Transaction added successfully!' });
         } catch (err) {
-            setAlertData({ type: 'error', text: 'Error adding transaction' });
+            setAlertData({ type: 'error', text: isEditing ? 'Error updating transaction' : 'Error adding transaction' });
         }
+    };
+
+    const openEditModal = (t) => {
+        setFormData({
+            type: t.type,
+            amount: t.amount,
+            category: t.category,
+            description: t.description || '',
+            date: new Date(t.date).toISOString().split('T')[0]
+        });
+        setIsEditing(true);
+        setEditingId(t.id);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setIsEditing(false);
+        setEditingId(null);
+        setFormData({ type: 'expense', amount: '', category: 'Food', description: '', date: new Date().toISOString().split('T')[0] });
     };
 
     const deleteTransaction = async (id) => {
@@ -74,7 +103,11 @@ const Transactions = () => {
                     <p className="text-sm md:text-base text-slate-400 mt-1">Manage all your income and expenses.</p>
                 </div>
                 <button
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => {
+                        setIsEditing(false);
+                        setFormData({ type: 'expense', amount: '', category: 'Food', description: '', date: new Date().toISOString().split('T')[0] });
+                        setIsModalOpen(true);
+                    }}
                     className="btn-primary flex items-center justify-center gap-2 py-3 px-6"
                 >
                     <Plus className="w-5 h-5" />
@@ -123,7 +156,13 @@ const Transactions = () => {
                                     <td className={`px-4 md:px-6 py-4 text-right font-bold text-sm md:text-lg ${t.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}`}>
                                         {t.type === 'income' ? '+' : '-'}${Number(t.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </td>
-                                    <td className="px-4 md:px-6 py-4 text-right">
+                                    <td className="px-4 md:px-6 py-4 text-right flex justify-end gap-2">
+                                        <button
+                                            onClick={() => openEditModal(t)}
+                                            className="p-2 text-slate-500 hover:text-primary-400 hover:bg-primary-500/10 rounded-lg transition-all"
+                                        >
+                                            <Edit3 className="w-4 h-4 md:w-5 md:h-5" />
+                                        </button>
                                         <button
                                             onClick={() => deleteTransaction(t.id)}
                                             className="p-2 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all"
@@ -149,13 +188,13 @@ const Transactions = () => {
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md">
                     <div className="glass w-full max-w-lg rounded-3xl p-6 md:p-8 border border-white/10 shadow-2xl relative max-h-[90vh] overflow-y-auto">
                         <button
-                            onClick={() => setIsModalOpen(false)}
+                            onClick={closeModal}
                             className="absolute top-6 right-6 p-2 text-slate-400 hover:bg-white/10 rounded-full"
                         >
                             <X className="w-6 h-6" />
                         </button>
 
-                        <h2 className="text-2xl font-bold mb-6">New Transaction</h2>
+                        <h2 className="text-2xl font-bold mb-6">{isEditing ? 'Edit Transaction' : 'New Transaction'}</h2>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div className="flex gap-4 p-1 bg-white/5 rounded-2xl">
@@ -240,7 +279,7 @@ const Transactions = () => {
                             </div>
 
                             <button type="submit" className="w-full btn-primary py-4 text-lg">
-                                Save Transaction
+                                {isEditing ? 'Update Transaction' : 'Save Transaction'}
                             </button>
                         </form>
                     </div>

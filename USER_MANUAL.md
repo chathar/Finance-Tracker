@@ -1,4 +1,4 @@
-# User Manual - Finance Tracker 📘
+# User Manual - FinTrack 📘
 
 Welcome to the Finance Tracker user guide. This document will help you understand and make the most of all the features available in the application.
 
@@ -29,7 +29,7 @@ The Dashboard is your financial control center.
 ## 3. Transactions
 
 Manage your money in detail here.
-- **Add Transaction**: Click the "Add Transaction" button to record a new entry. Specify the type (Income/Expense), amount, date, category, and a brief description.
+- **Add/Edit Transaction**: Click the "Add Transaction" button to record a new entry, or use the **edit (pencil) icon** to modify an existing one. Specify the type (Income/Expense), amount, date, category, and a brief description.
 - **View History**: A full table of all your transactions.
 - **Delete**: Remove incorrect entries using the trash icon.
 

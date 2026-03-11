@@ -1,4 +1,4 @@
-# Finance Tracker 💰
+# FinTrack 💰
 
 A modern, full-stack personal finance management application with a focus on ease of use and beautiful data visualization. Track your income, expenses, and get deep insights into your spending habits.
 
@@ -7,7 +7,7 @@ A modern, full-stack personal finance management application with a focus on eas
 ## ✨ Features
 
 - **📊 Dynamic Dashboard**: Real-time overview of your balance, income, and expenses with period filtering (Monthly, Yearly, All Time).
-- **📝 Transaction Management**: Easily record and categorize every income and expense.
+- **📝 Transaction Management**: Easily record, **edit**, and categorize every income and expense.
 - **📁 Custom Categories**: Organize your finances with personalized labels.
 - **📈 Advanced Reports**: Visual trend analysis (Income vs Expenses) and categorical breakdown.
 - **🔒 Secure Authentication**: User registration and login with JWT-based sessions.
